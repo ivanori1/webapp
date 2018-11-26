@@ -21,4 +21,4 @@ def entery_page():
     return render_template('entery.html',
                             the_title = "Welcome to search4letters on the web!")
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
