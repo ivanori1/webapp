@@ -9,7 +9,7 @@ def log_request(req: 'flask_request', res: str) -> None:
 
 
 @app.route('/search4', methods=['POST'])
-def do_search():
+def do_search() -> 'html':
     phrase = request.form['phrase']
     letters = request.form['letters']
     title = "Here are your results: "
@@ -19,20 +19,31 @@ def do_search():
                             the_title = title,
                             the_phrase = phrase,
                             the_letters = letters,
-                            the_results = results, )
+                            the_results = results,
+                             )
 
 @app.route('/')
 @app.route('/entery')
-def entery_page():
+def entery_page() -> 'html':
     return render_template('entery.html',
                             the_title = "Welcome to search4letters on the web!")
 
 
 @app.route('/viewlog')
-def view_the_log() -> str:
+def view_the_log() -> 'html':
+    contents = []
     with open('vsearch.log') as log:
-        contents = log.read()
-    return escape(contents)
+        for line in log:
+            contents.append([])
+            for item in line.split('|'):
+                contents[-1].append(escape(item))
+    titles = ('Form Data', 'Remote_addr', 'User_agent', 'Results')
+    return render_template('viewlog.html',
+                            the_title = 'View Log',
+                            the_row_titles = titles,
+                            the_data = contents,
+                            )
+
 
 if __name__ == '__main__':
     app.run(debug=True)
