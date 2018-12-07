@@ -11,7 +11,7 @@ def log_request(req: 'flask_request', res: str) -> None:
                  }
     import mysql.connector
 
-    conn = mysql.connector(**dbconfig)
+    conn = mysql.connector.connect(**dbconfig)
     cursor = conn.cursor()
     _SQL = """insert into log
               (phrase, letters, ip, browser_string, results)
