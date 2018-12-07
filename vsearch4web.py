@@ -1,5 +1,6 @@
 from flask import Flask,  render_template, request, escape
 from vsearch import search4letters
+import mysql.connector
 
 app = Flask(__name__)
 
@@ -9,16 +10,14 @@ def log_request(req: 'flask_request', res: str) -> None:
                  'password': 'vsearchpasswd',
                  'database': 'vsearchlogDB',
                  }
-    import mysql.connector
 
     conn = mysql.connector(**dbconfig)
     cursor = conn.cursor()
+
     _SQL = """insert into log
               (phrase, letters, ip, browser_string, results)
               values
               (%s, %s, %s, %s, %s)"""
-
-
     cursor.execute(_SQL, (req.form['phrase'],
                           req.form['letters'],
                           req.remote_addr,
@@ -29,7 +28,6 @@ def log_request(req: 'flask_request', res: str) -> None:
     conn.commit()
     cursor.close()
     conn.close()
-
 
 
 @app.route('/search4', methods=['POST'])
