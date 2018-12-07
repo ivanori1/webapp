@@ -5,6 +5,7 @@ import mysql.connector
 app = Flask(__name__)
 
 def log_request(req: 'flask_request', res: str) -> None:
+    """ Log details of the web request and the results."""
     dbconfig = { 'host': '127.0.0.1',
                  'user': 'vsearch',
                  'password': 'vsearchpasswd',
@@ -13,8 +14,8 @@ def log_request(req: 'flask_request', res: str) -> None:
 
     conn = mysql.connector(**dbconfig)
     cursor = conn.cursor()
-
-    _SQL = """insert into log
+    with UseDatabase(dbconfig) as cursor:
+        _SQL = """insert into log
               (phrase, letters, ip, browser_string, results)
               values
               (%s, %s, %s, %s, %s)"""
@@ -24,10 +25,6 @@ def log_request(req: 'flask_request', res: str) -> None:
                           req.user_agent.browser,
                           res,
                           ))
-
-    conn.commit()
-    cursor.close()
-    conn.close()
 
 
 @app.route('/search4', methods=['POST'])
