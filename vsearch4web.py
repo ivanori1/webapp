@@ -13,7 +13,6 @@ app.config['dbconfig'] = { 'host': '127.0.0.1',
 
 
 def log_request(req: 'flask_request', res: str) -> None:
-<<<<<<< HEAD
     dbconfig = { 'host': '127.0.0.1',
                  'user': 'vsearch',
                  'password': 'vsearchpasswd',
@@ -30,7 +29,6 @@ def log_request(req: 'flask_request', res: str) -> None:
 
 
     cursor.execute(_SQL, (req.form['phrase'],
-=======
     """ Log details of the web request and the results."""
 
     with UseDatabase(app.config['dbconfig']) as cursor:
@@ -40,7 +38,6 @@ def log_request(req: 'flask_request', res: str) -> None:
                   (%s, %s, %s, %s, %s)"""
 
         cursor.execute(_SQL, (req.form['phrase'],
->>>>>>> 925ef42b436560f05e82ce36a4dc0fe4eca2cddd
                           req.form['letters'],
                           req.remote_addr,
                           req.user_agent.browser,
